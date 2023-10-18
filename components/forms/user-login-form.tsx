@@ -17,6 +17,8 @@ import {
   FormMessage,
 } from "../ui/form";
 import { signIn } from "next-auth/react";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface UserLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -27,6 +29,7 @@ const formSchema = z.object({
 
 export function UserLoginForm({ className, ...props }: UserLoginFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -40,13 +43,19 @@ export function UserLoginForm({ className, ...props }: UserLoginFormProps) {
     try {
       setIsLoading(true);
       const result = await signIn("credentials", {
-        redirect: true,
+        redirect: false,
         username: values.username,
         password: values.password,
-        callbackUrl: "/dashboard",
+        callbackUrl: "/",
       });
-    } catch (error) {
-      console.log(error);
+
+      if (result?.ok) {
+        router.push("/");
+      } else {
+        toast.error("Invalid credentials.");
+      }
+    } catch (error: any) {
+      toast.error(error);
     } finally {
       setIsLoading(false);
     }
@@ -94,7 +103,7 @@ export function UserLoginForm({ className, ...props }: UserLoginFormProps) {
               {isLoading && (
                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
               )}
-              Sign Up
+              Sign In
             </Button>
           </div>
         </form>

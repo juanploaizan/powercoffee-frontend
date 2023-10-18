@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
+import Navbar from "@/components/Navbar";
 
 export default async function DashboardLayout({
   children,
@@ -40,7 +41,7 @@ export default async function DashboardLayout({
 
   return (
     <>
-      <div>This will be a Navbar</div>
+      <Navbar />
       {children}
     </>
   );

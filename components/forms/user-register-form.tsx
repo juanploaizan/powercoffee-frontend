@@ -17,6 +17,8 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
+import axios from "@/lib/axios";
+import toast from "react-hot-toast";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -49,10 +51,17 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       setIsLoading(true);
-      // TODO: Add api url
-      router.push("/signin");
-    } catch (error) {
+      const res = await axios.post("http://localhost:8080/api/users/signup", {
+        ...values,
+        role: ["ADMIN"],
+      });
+      if (res.status === 200) {
+        router.push("/api/auth/signin");
+      }
+    } catch (error: any) {
       console.log(error);
+      const errorMessage = error.response?.data?.message || "An error occurred";
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }

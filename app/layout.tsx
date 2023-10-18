@@ -21,11 +21,13 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <NextAuthProvider>
-          <ToastProvider />
-          <ModalProvider />
-          {children}
-        </NextAuthProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <NextAuthProvider>
+            <ToastProvider />
+            <ModalProvider />
+            {children}
+          </NextAuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

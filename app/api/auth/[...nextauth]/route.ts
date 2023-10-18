@@ -1,3 +1,4 @@
+import axios from "@/lib/axios";
 import { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -17,25 +18,19 @@ export const authOptions: NextAuthOptions = {
 
         const { username, password } = credentials as any;
 
-        const res = await fetch("http://localhost:8080/api/users/signin", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username,
-            password,
-          }),
-        });
-
-        if (res.status === 401 || res.status === 403) {
-          console.log(res.statusText);
+        try {
+          const res = await axios.post(
+            "http://localhost:8080/api/users/signin",
+            {
+              username,
+              password,
+            }
+          );
+          const user = await res.data;
+          return user;
+        } catch (error) {
           return null;
         }
-
-        const user = await res.json();
-
-        return user;
       },
     }),
   ],
