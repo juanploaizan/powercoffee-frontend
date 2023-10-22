@@ -1,4 +1,4 @@
-import axios from "@/lib/axios";
+import axios from "axios";
 import { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -18,36 +18,33 @@ export const authOptions: NextAuthOptions = {
 
         const { username, password } = credentials as any;
 
-        try {
-          const res = await axios.post(
-            "http://localhost:8080/api/users/signin",
-            {
-              username,
-              password,
-            }
-          );
-          const user = await res.data;
-          return user;
-        } catch (error) {
-          return null;
+        const url = process.env.BACKEND_URL + "/api/users/signin";
+        const res = await axios.post(url, { username, password });
+        if (res.status === 200) {
+          return await res.data;
         }
+        return null;
       },
     }),
   ],
+
   callbacks: {
-    async jwt({ token, user }) {
-      return { ...token, ...user };
-    },
     async session({ session, token }) {
       session.user = token as any;
       return session;
     },
+    async jwt({ token, user }) {
+      return { ...token, ...user };
+    },
   },
+
   session: {
     strategy: "jwt",
   },
+
   pages: {
     signIn: "/signin",
+    newUser: "/signup",
   },
 };
 

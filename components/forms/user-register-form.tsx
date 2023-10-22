@@ -5,7 +5,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { cn } from "@/lib/utils";
-import { Icons } from "@/components/Icons";
+import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
@@ -17,24 +17,38 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import axios from "@/lib/axios";
+import axios from "axios";
 import toast from "react-hot-toast";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-const formSchema = z.object({
-  username: z.string().min(1).max(30),
-  email: z.string().email(),
-  phoneNumber: z.string().min(1).max(10),
-  firstName: z.string().min(1),
-  lastName: z.string().min(1),
-  password: z.string().min(8).max(30),
-});
+const formSchema = z
+  .object({
+    username: z
+      .string()
+      .min(1)
+      .max(20)
+      .regex(
+        /^[a-zA-Z][a-zA-Z0-9_-]*$/,
+        "Username can only contain letters, numbers, underscores and dashes."
+      ),
+    email: z.string().email().min(1).max(50),
+    phoneNumber: z.string().length(10),
+    firstName: z.string().min(2).max(30),
+    lastName: z.string().min(2).max(30),
+    password: z.string().min(8).max(25),
+    confirmPassword: z.string().min(8).max(25),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [isRedirecting, setIsRedirecting] = React.useState<boolean>(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -45,6 +59,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       phoneNumber: "",
       username: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
@@ -56,12 +71,28 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         role: ["ADMIN"],
       });
       if (res.status === 200) {
-        router.push("/api/auth/signin");
+        setIsRedirecting(true);
+        toast.success("User registered successfully!");
+        setTimeout(() => {
+          setIsRedirecting(false);
+          router.push("/api/auth/signin");
+        }, 3000);
       }
     } catch (error: any) {
-      console.log(error);
-      const errorMessage = error.response?.data?.message || "An error occurred";
-      toast.error(errorMessage);
+      const errorData = error.response?.data;
+      let errorMessage = errorData?.message || "An error occurred";
+      const errors: Record<string, string> = {};
+
+      if (errorData?.message) {
+        toast.error(errorMessage);
+      } else {
+        Object.keys(errorData || {}).forEach((key) => {
+          errors[key] = errorData[key];
+        });
+        const errorMessages = Object.values(errors).join("\n");
+        errorMessage = `${errorMessage}\n${errorMessages}`;
+        toast.error(errorMessage);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -79,7 +110,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                 <FormLabel>First name</FormLabel>
                 <FormControl>
                   <Input
-                    disabled={isLoading}
+                    disabled={isLoading || isRedirecting}
                     placeholder="First name"
                     {...field}
                   />
@@ -96,7 +127,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                 <FormLabel>Last name</FormLabel>
                 <FormControl>
                   <Input
-                    disabled={isLoading}
+                    disabled={isLoading || isRedirecting}
                     placeholder="Last name"
                     {...field}
                   />
@@ -114,7 +145,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                 <FormLabel>Username</FormLabel>
                 <FormControl>
                   <Input
-                    disabled={isLoading}
+                    disabled={isLoading || isRedirecting}
                     placeholder="Username"
                     {...field}
                   />
@@ -131,7 +162,11 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input disabled={isLoading} placeholder="Email" {...field} />
+                  <Input
+                    disabled={isLoading || isRedirecting}
+                    placeholder="Email"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -146,7 +181,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                 <FormLabel>Phone number</FormLabel>
                 <FormControl>
                   <Input
-                    disabled={isLoading}
+                    disabled={isLoading || isRedirecting}
                     placeholder="Phone number"
                     {...field}
                   />
@@ -164,7 +199,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                 <FormLabel>Password</FormLabel>
                 <FormControl>
                   <Input
-                    disabled={isLoading}
+                    disabled={isLoading || isRedirecting}
                     placeholder="Password"
                     type="password"
                     {...field}
@@ -175,9 +210,32 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             )}
           />
 
+          <FormField
+            control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Confirm Password</FormLabel>
+                <FormControl>
+                  <Input
+                    disabled={isLoading || isRedirecting}
+                    placeholder="Confirm Password"
+                    type="password"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <div className="pt-4 space-x-2 flex items-center justify-center w-full">
-            <Button disabled={isLoading} type="submit" className="w-full">
-              {isLoading && (
+            <Button
+              disabled={isLoading || isRedirecting}
+              type="submit"
+              className="w-full"
+            >
+              {(isLoading || isRedirecting) && (
                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
               )}
               Sign Up
@@ -196,8 +254,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           </span>
         </div>
       </div>
-      <Button variant="outline" type="button" disabled={isLoading}>
-        {isLoading ? (
+      <Button
+        variant="outline"
+        type="button"
+        disabled={isLoading || isRedirecting}
+      >
+        {isLoading || isRedirecting ? (
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
         ) : (
           <Icons.google className="mr-2 h-4 w-4" />

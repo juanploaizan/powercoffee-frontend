@@ -3,7 +3,6 @@
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Modal } from "@/components/ui/modal";
@@ -32,8 +31,8 @@ import {
   CommandInput,
   CommandItem,
 } from "@/components/ui/command";
-import useAxiosAuth from "@/hooks/use-axios-auth";
 import { toast } from "react-hot-toast";
+import axios from "axios";
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -96,8 +95,6 @@ const cities = [
 
 export const StoreModal = () => {
   const storeModal = useStoreModal();
-  const { data: session } = useSession();
-  const axiosAuth = useAxiosAuth();
 
   const [loading, setLoading] = useState(false);
 
@@ -113,15 +110,10 @@ export const StoreModal = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setLoading(true);
-      const response = await axiosAuth.post("/api/coffee-shops", {
-        ...values,
-        adminId: session?.user?.id,
-      });
-
+      const response = await axios.post("/api/coffee-shops", values);
       window.location.assign(`/${response.data.id}`);
     } catch (error) {
       toast.error("Something went wrong");
-      console.log(error);
     } finally {
       setLoading(false);
     }

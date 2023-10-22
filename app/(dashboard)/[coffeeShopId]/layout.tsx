@@ -1,7 +1,7 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/navbar";
+import { useSession } from "@/lib/user-session";
+import api from "@/lib/axios-interceptor";
 
 export default async function DashboardLayout({
   children,
@@ -10,32 +10,15 @@ export default async function DashboardLayout({
   children: React.ReactNode;
   params: { coffeeShopId: string };
 }) {
-  const session = await getServerSession(authOptions);
+  const user = await useSession();
 
-  if (!session) {
+  if (!user) {
     redirect("api/auth/signin");
   }
 
-  let coffeeShopId;
-
-  console.log("params coffee: " + params.coffeeShopId);
-
   try {
-    const req = await fetch(
-      `${process.env.BACKEND_URL}/api/coffee-shops/${params.coffeeShopId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session?.user.accessToken}`,
-        },
-      }
-    );
-    const coffeeShop = await req.json();
-    coffeeShopId = coffeeShop.id;
-  } catch (error) {}
-
-  if (!coffeeShopId) {
+    await api.get(`/api/coffee-shops/${params.coffeeShopId}`);
+  } catch (error) {
     redirect(`/`);
   }
 
