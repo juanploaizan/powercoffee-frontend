@@ -2,7 +2,7 @@
 
 import * as z from "zod";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
@@ -34,57 +34,12 @@ import {
   CommandInput,
   CommandItem,
 } from "@/components/ui/command";
+import { City } from "@/types/schemas";
 
-const cities = [
-  {
-    value: "ARMENIA",
-    label: "Armenia",
-  },
-  {
-    value: "BUENAVISTA",
-    label: "Buenavista",
-  },
-  {
-    value: "CALARCA",
-    label: "Calarcá",
-  },
-  {
-    value: "CIRCASIA",
-    label: "Circasia",
-  },
-  {
-    value: "CORDOBA",
-    label: "Córdoba",
-  },
-  {
-    value: "FILANDIA",
-    label: "Filandia",
-  },
-  {
-    value: "GENOVA",
-    label: "Génova",
-  },
-  {
-    value: "LA_TEBAIDA",
-    label: "La Tebaida",
-  },
-  {
-    value: "MONTENEGRO",
-    label: "Montenegro",
-  },
-  {
-    value: "PIJAO",
-    label: "Pijao",
-  },
-  {
-    value: "QUIMBAYA",
-    label: "Quimbaya",
-  },
-  {
-    value: "SALENTO",
-    label: "Salento",
-  },
-];
+const fetchCities = async () => {
+  const res = await axios.get("/api/cities");
+  return await res.data;
+};
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -104,6 +59,8 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
 
+  const [cities, setCities] = useState<City[]>([]);
+
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -111,6 +68,15 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
     resolver: zodResolver(formSchema),
     defaultValues: initialData,
   });
+
+  useEffect(() => {
+    setLoading(true);
+    fetchCities()
+      .then((cities) => {
+        setCities(cities);
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
   const onSubmit = async (data: SettingsFormValues) => {
     try {

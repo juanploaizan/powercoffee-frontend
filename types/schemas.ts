@@ -1,10 +1,30 @@
-import { z } from "zod";
+export type PaginationResponse<T> = {
+  data: T[];
+  pageNumber: number;
+  pageSize: number;
+  totalElements: number;
+  totalPages: number;
+  first: boolean;
+  last: boolean;
+};
 
-export const categorySchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  coffeeShopId: z.string(),
-  createdAt: z.string(),
-});
+export type Pagination = {
+  pageNumber: number;
+  pageSize: number;
+  totalElements: number;
+  totalPages: number;
+  first: boolean;
+  last: boolean;
+};
 
-export type Category = z.infer<typeof categorySchema>;
+export type Category = {
+  id: string;
+  name: string;
+  coffeeShopId: string;
+  createdAt: string;
+};
+
+export type City = {
+  label: string;
+  value: string;
+};

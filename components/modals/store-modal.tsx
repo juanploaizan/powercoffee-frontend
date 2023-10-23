@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/form";
 import { useStoreModal } from "@/hooks/use-store-modal";
 import { Button } from "@/components/ui/button";
-import { useSession } from "next-auth/react";
 import {
   Popover,
   PopoverContent,
@@ -33,6 +32,8 @@ import {
 } from "@/components/ui/command";
 import { toast } from "react-hot-toast";
 import axios from "axios";
+import { useEffect } from "react";
+import { City } from "@/types/schemas";
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -42,68 +43,30 @@ const formSchema = z.object({
   }),
 });
 
-const cities = [
-  {
-    value: "ARMENIA",
-    label: "Armenia",
-  },
-  {
-    value: "BUENAVISTA",
-    label: "Buenavista",
-  },
-  {
-    value: "CALARCA",
-    label: "Calarcá",
-  },
-  {
-    value: "CIRCASIA",
-    label: "Circasia",
-  },
-  {
-    value: "CORDOBA",
-    label: "Córdoba",
-  },
-  {
-    value: "FILANDIA",
-    label: "Filandia",
-  },
-  {
-    value: "GENOVA",
-    label: "Génova",
-  },
-  {
-    value: "LA_TEBAIDA",
-    label: "La Tebaida",
-  },
-  {
-    value: "MONTENEGRO",
-    label: "Montenegro",
-  },
-  {
-    value: "PIJAO",
-    label: "Pijao",
-  },
-  {
-    value: "QUIMBAYA",
-    label: "Quimbaya",
-  },
-  {
-    value: "SALENTO",
-    label: "Salento",
-  },
-];
+const fetchCities = async () => {
+  const res = await axios.get("/api/cities");
+  return await res.data;
+};
 
 export const StoreModal = () => {
+  const [cities, setCities] = useState<City[]>([]);
   const storeModal = useStoreModal();
-
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    fetchCities()
+      .then((cities) => {
+        setCities(cities);
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
       address: "",
-      city: "ARMENIA",
     },
   });
 
