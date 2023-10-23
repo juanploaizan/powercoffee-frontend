@@ -13,6 +13,12 @@ export default async function SetupPage({
     redirect("api/auth/signin");
   }
 
+  try {
+    await api.get(`/api/users/${user.id}`);
+  } catch (error) {
+    redirect(`/api/auth/signout`);
+  }
+
   const res = await api.get(`/api/coffee-shops/admin/${user.id}`); // Get the first coffee shop of the user
 
   if (res.data.id) {

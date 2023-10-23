@@ -1,3 +1,4 @@
+import api from "@/lib/axios-interceptor";
 import axios from "axios";
 import { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
@@ -18,8 +19,12 @@ export const authOptions: NextAuthOptions = {
 
         const { username, password } = credentials as any;
 
-        const url = process.env.BACKEND_URL + "/api/users/signin";
-        const res = await axios.post(url, { username, password });
+        const res = await api.post(
+          "/api/users/signin",
+          JSON.stringify({ username, password }),
+          { headers: { "Content-Type": "application/json" } }
+        );
+
         if (res.status === 200) {
           return await res.data;
         }

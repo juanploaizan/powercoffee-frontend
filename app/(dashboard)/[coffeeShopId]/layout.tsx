@@ -17,6 +17,12 @@ export default async function DashboardLayout({
   }
 
   try {
+    await api.get(`/api/users/${user.id}`);
+  } catch (error) {
+    redirect(`/api/auth/signout`);
+  }
+
+  try {
     await api.get(`/api/coffee-shops/${params.coffeeShopId}`);
   } catch (error) {
     redirect(`/`);
