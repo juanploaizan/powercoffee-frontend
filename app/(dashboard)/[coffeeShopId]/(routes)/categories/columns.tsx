@@ -56,10 +56,10 @@ export const columns: ColumnDef<Category>[] = [
       <DataTableColumnHeader column={column} title="Name" />
     ),
     cell: ({ row }) => {
-      const name = row.getValue("name") as string;
-      return <div className="font-medium">{name}</div>;
+      return <div className="font-medium">{row.getValue("name")}</div>;
     },
     enableHiding: false,
+    enableSorting: false,
   },
   {
     accessorKey: "createdAt",

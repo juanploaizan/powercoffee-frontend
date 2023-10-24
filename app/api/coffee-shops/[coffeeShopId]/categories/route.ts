@@ -46,3 +46,27 @@ export async function POST(
     return new NextResponse("Internal error", { status: 500 });
   }
 }
+
+export async function DELETE(
+  req: Request,
+  { params }: { params: { coffeeShopId: string } }
+) {
+  try {
+    const user = await useSession();
+
+    if (!user) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    const body = await req.json();
+
+    const res = await api.delete(
+      `/api/coffee-shops/${params.coffeeShopId}/categories`,
+      { data: body }
+    );
+    return NextResponse.json(res.data);
+  } catch (error) {
+    console.log("[CATEGORIES_DELETE] ", error);
+    return new NextResponse("Internal error", { status: 500 });
+  }
+}
