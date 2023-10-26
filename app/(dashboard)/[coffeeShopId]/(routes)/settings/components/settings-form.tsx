@@ -2,7 +2,7 @@
 
 import * as z from "zod";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
@@ -34,12 +34,7 @@ import {
   CommandInput,
   CommandItem,
 } from "@/components/ui/command";
-import { City } from "@/types/schemas";
-
-const fetchCities = async () => {
-  const res = await axios.get("/api/cities");
-  return await res.data;
-};
+import { cities } from "@/lib/combo-boxes";
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -59,8 +54,6 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
 
-  const [cities, setCities] = useState<City[]>([]);
-
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -68,15 +61,6 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
     resolver: zodResolver(formSchema),
     defaultValues: initialData,
   });
-
-  useEffect(() => {
-    setLoading(true);
-    fetchCities()
-      .then((cities) => {
-        setCities(cities);
-      })
-      .finally(() => setLoading(false));
-  }, []);
 
   const onSubmit = async (data: SettingsFormValues) => {
     try {

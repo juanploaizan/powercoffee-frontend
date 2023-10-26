@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/Navbar";
 import { useSession } from "@/lib/user-session";
 import api from "@/lib/axios-interceptor";
 

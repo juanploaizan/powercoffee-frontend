@@ -31,9 +31,8 @@ import {
   CommandItem,
 } from "@/components/ui/command";
 import { toast } from "react-hot-toast";
+import { cities } from "@/lib/combo-boxes";
 import axios from "axios";
-import { useEffect } from "react";
-import { City } from "@/types/schemas";
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -43,24 +42,9 @@ const formSchema = z.object({
   }),
 });
 
-const fetchCities = async () => {
-  const res = await axios.get("/api/cities");
-  return await res.data;
-};
-
 export const StoreModal = () => {
-  const [cities, setCities] = useState<City[]>([]);
   const storeModal = useStoreModal();
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    setLoading(true);
-    fetchCities()
-      .then((cities) => {
-        setCities(cities);
-      })
-      .finally(() => setLoading(false));
-  }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

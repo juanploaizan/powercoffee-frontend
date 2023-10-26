@@ -17,14 +17,21 @@ export type Pagination = {
   last: boolean;
 };
 
+export type Customer = {
+  id: string;
+  dni: string;
+  email: string;
+  phoneNumber: string;
+  firstName: string;
+  lastName: string;
+  gender: string;
+  birthDate: string;
+  coffeeShopId: string;
+};
+
 export type Category = {
   id: string;
   name: string;
   coffeeShopId: string;
   createdAt: string;
-};
-
-export type City = {
-  label: string;
-  value: string;
 };

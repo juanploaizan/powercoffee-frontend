@@ -1,6 +1,6 @@
 "use client";
 
-import { Category } from "@/types/schemas";
+import { Customer } from "@/types/schemas";
 import { ColumnDef } from "@tanstack/react-table";
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
 
@@ -30,7 +30,7 @@ import { DataTableColumnHeader } from "../../../../../components/ui/column-heade
  * will be formatted, sorted and filtered.
  */
 
-export const columns: ColumnDef<Category>[] = [
+export const columns: ColumnDef<Customer>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -50,29 +50,61 @@ export const columns: ColumnDef<Category>[] = [
     enableSorting: false,
     enableHiding: false,
   },
+
   {
-    accessorKey: "name",
+    accessorKey: "firstName",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Name" />
+      <DataTableColumnHeader column={column} title="First Name" />
     ),
     cell: ({ row }) => {
-      return <div className="font-medium">{row.getValue("name")}</div>;
+      return <div className="font-medium">{row.getValue("firstName")}</div>;
     },
     enableHiding: false,
-    enableSorting: false,
+    enableSorting: true,
   },
+
   {
-    accessorKey: "createdAt",
+    accessorKey: "lastName",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Creation Date" />
+      <DataTableColumnHeader column={column} title="Last Name" />
     ),
+    cell: ({ row }) => {
+      return <div className="font-medium">{row.getValue("lastName")}</div>;
+    },
+    enableHiding: false,
+    enableSorting: true,
   },
+
+  {
+    accessorKey: "email",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Email" />
+    ),
+    cell: ({ row }) => {
+      return <div className="text-sm">{row.getValue("email")}</div>;
+    },
+    enableSorting: true,
+    enableHiding: true,
+  },
+
+  {
+    accessorKey: "phoneNumber",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Phone Number" />
+    ),
+    cell: ({ row }) => {
+      return <div className="text-sm">{row.getValue("phoneNumber")}</div>;
+    },
+    enableSorting: true,
+    enableHiding: true,
+  },
+
   {
     id: "actions",
     enableSorting: false,
     enableHiding: false,
     cell: ({ row }) => {
-      const category = row.original;
+      const customer = row.original;
       const [open, setOpen] = useState(false);
       const [loading, setLoading] = useState(false);
       const router = useRouter();
@@ -81,12 +113,12 @@ export const columns: ColumnDef<Category>[] = [
         try {
           setLoading(true);
           await axios.delete(
-            `/api/coffee-shops/${category.coffeeShopId}/categories/${category.id}`
+            `/api/coffee-shops/${customer.coffeeShopId}/customers/${customer.id}`
           );
-          toast.success("Category deleted.");
+          toast.success("Customer deleted.");
           router.refresh();
         } catch (error) {
-          toast.error("An error occurred while deleting category");
+          toast.error("An error occurred while deleting customer.");
         } finally {
           setOpen(false);
           setLoading(false);
@@ -111,9 +143,7 @@ export const columns: ColumnDef<Category>[] = [
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <Link
-                href={`/${category.coffeeShopId}/categories/${category.id}`}
-              >
+              <Link href={`/${customer.coffeeShopId}/customers/${customer.id}`}>
                 <DropdownMenuItem>
                   <Edit className="mr-2 h-4 w-4" />
                   Edit
