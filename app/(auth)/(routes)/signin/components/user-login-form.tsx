@@ -5,8 +5,8 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { cn } from "@/lib/utils";
-import { Icons } from "@/components/icons";
-import { Button } from "@/components/ui/button";
+import { Icons } from "@/components/Icons";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Form,
@@ -15,10 +15,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
+} from "@/components/ui/form";
 import { signIn } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { badgeVariants } from "@/components/ui/badge";
+import { Label } from "@/components/ui/label";
 
 interface UserLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -105,6 +108,15 @@ export function UserLoginForm({ className, ...props }: UserLoginFormProps) {
               )}
               Sign In
             </Button>
+          </div>
+
+          <div className="flex justify-center">
+            <Link
+              href="/forgot-password"
+              className={buttonVariants({ variant: "link" })}
+            >
+              Forgot your password?
+            </Link>
           </div>
         </form>
       </Form>

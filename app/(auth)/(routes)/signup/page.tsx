@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
-import { UserAuthForm } from "@/components/forms/user-register-form";
+import { UserAuthForm } from "@/app/(auth)/(routes)/signup/components/user-register-form";
 
 export const metadata: Metadata = {
   title: "Powercoffee - Register",
