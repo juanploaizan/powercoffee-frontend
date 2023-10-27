@@ -17,6 +17,16 @@ export type Pagination = {
   last: boolean;
 };
 
+export type User = {
+  id: number;
+  username: string;
+  email: string;
+  phoneNumber: string;
+  firstName: string;
+  lastName: string;
+  avatarNumber: number | null;
+};
+
 export type Customer = {
   id: string;
   dni: string;

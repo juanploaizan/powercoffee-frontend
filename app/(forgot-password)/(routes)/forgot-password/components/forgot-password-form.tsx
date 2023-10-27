@@ -48,7 +48,7 @@ export default function ForgotPasswordForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
     try {
-      const response = await axios.post("/api/forgot-password", values);
+      const response = await axios.post("/api/users/forgot-password", values);
       const message =
         response.status === 200 ? "Password reset email sent!" : "Error";
       router.push("/signin");

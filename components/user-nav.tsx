@@ -3,25 +3,42 @@ import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import api from "@/lib/axios-interceptor";
 import { useSession } from "@/lib/user-session";
+import { User } from "@/types/schemas";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export async function UserNav() {
   const user = await useSession();
+
+  if (!user) {
+    redirect("/");
+  }
+
+  const res = await api.get(`/api/users/${user.id}`);
+  const userInfo: User = res.data;
+
+  const initials =
+    userInfo.firstName.charAt(0).toUpperCase() +
+    userInfo.lastName.charAt(0).toUpperCase();
+  let avatarUrl;
+  if (userInfo.avatarNumber != null) {
+    avatarUrl = `/avatars/0${userInfo.avatarNumber}.png`;
+  }
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
-            <AvatarImage src="/avatars/male-avatar.png" alt="@avatar" />
-            <AvatarFallback>SC</AvatarFallback>
+            <AvatarImage src={avatarUrl} alt="@avatar" />
+            <AvatarFallback>{initials}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>

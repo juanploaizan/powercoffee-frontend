@@ -1,15 +1,13 @@
+import { Separator } from "@/components/ui/separator";
+import { CoffeeShopSettingsPage } from "./coffee-shop-form";
 import api from "@/lib/axios-interceptor";
-import { useSession } from "@/lib/user-session";
 import { redirect } from "next/navigation";
-import { SettingsForm } from "./components/settings-form";
 
-async function SettingsPage({ params }: { params: { coffeeShopId: string } }) {
-  const user = await useSession();
-
-  if (!user) {
-    redirect("api/auth/signin");
-  }
-
+export default async function SettingsCoffeeShopPage({
+  params,
+}: {
+  params: { coffeeShopId: string };
+}) {
   const res = await api.get(`/api/coffee-shops/${params.coffeeShopId}`);
   const coffeeShop = res.data;
 
@@ -18,12 +16,15 @@ async function SettingsPage({ params }: { params: { coffeeShopId: string } }) {
   }
 
   return (
-    <div className="flex-col">
-      <div className="flex-1 space-y-4 p-8 pt-6">
-        <SettingsForm initialData={coffeeShop} />
+    <div className="space-y-6">
+      <div>
+        <h3 className="text-lg font-medium">Coffee shop</h3>
+        <p className="text-sm text-muted-foreground">
+          This is the information of the current coffee shop.
+        </p>
       </div>
+      <Separator />
+      <CoffeeShopSettingsPage initialData={coffeeShop} />
     </div>
   );
 }
-
-export default SettingsPage;

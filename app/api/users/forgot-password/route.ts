@@ -9,7 +9,8 @@ export async function POST(req: Request) {
     return NextResponse.json(res.data);
   } catch (error: any) {
     //console.log("[COFFEE-SHOPS_POST] ", error);
-    const message = error?.response?.data?.message || "Something went wrong";
-    return new NextResponse(message, { status: 500 });
+    return new NextResponse(JSON.stringify(error.response.data), {
+      status: error.response.status,
+    });
   }
 }

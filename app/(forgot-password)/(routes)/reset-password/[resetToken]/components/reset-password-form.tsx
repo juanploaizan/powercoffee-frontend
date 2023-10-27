@@ -57,7 +57,7 @@ export default function ResetPasswordForm({
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
     try {
-      await axios.post(`/api/forgot-password/${resetToken}`, values);
+      await axios.post(`/api/users/reset-password/${resetToken}`, values);
       router.push("/signin");
       toast.success("Password reset successfully!");
     } catch (error: any) {

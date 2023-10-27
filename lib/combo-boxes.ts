@@ -59,3 +59,36 @@ export const cities = [
     value: "SALENTO",
   },
 ] as const;
+
+export const avatars = [
+  {
+    path: "",
+    value: null,
+    label: "No avatar",
+  },
+  {
+    path: "/avatars/01.png",
+    value: 1,
+    label: "Avatar 1",
+  },
+  {
+    path: "/avatars/02.png",
+    value: 2,
+    label: "Avatar 2",
+  },
+  {
+    path: "/avatars/03.png",
+    value: 3,
+    label: "Avatar 3",
+  },
+  {
+    path: "/avatars/04.png",
+    value: 4,
+    label: "Avatar 4",
+  },
+  {
+    path: "/avatars/05.png",
+    value: 5,
+    label: "Avatar 5",
+  },
+] as const;
