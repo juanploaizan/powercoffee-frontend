@@ -25,6 +25,8 @@ import { Icons } from "@/components/Icons";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import ReCAPTCHA from "react-google-recaptcha";
+import { verifyCaptcha } from "@/ServerActions";
 
 const formSchema = z.object({
   email: z
@@ -36,6 +38,8 @@ const formSchema = z.object({
 
 export default function ForgotPasswordForm() {
   const [loading, setLoading] = useState<boolean>(false);
+  const [disabled, setDisabled] = useState<boolean>(false);
+  const [captcha, setCaptcha] = useState<string | null>();
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -46,6 +50,13 @@ export default function ForgotPasswordForm() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setDisabled(true);
+    const isValid = await verifyCaptcha(captcha!);
+    if (!isValid) {
+      toast.error("Please verify you are not a robot");
+      setTimeout(() => setDisabled(false), 1500);
+      return;
+    }
     setLoading(true);
     try {
       const response = await axios.post("/api/users/forgot-password", values);
@@ -57,6 +68,7 @@ export default function ForgotPasswordForm() {
       toast.error(error.response.data.message);
     } finally {
       setLoading(false);
+      setDisabled(false);
     }
   }
 
@@ -81,7 +93,7 @@ export default function ForgotPasswordForm() {
                   <FormControl>
                     <Input
                       type="email"
-                      disabled={loading}
+                      disabled={loading || disabled}
                       placeholder="Enter your email address"
                       {...field}
                     />
@@ -90,7 +102,13 @@ export default function ForgotPasswordForm() {
                 </FormItem>
               )}
             />
-            <Button disabled={loading} type="submit">
+
+            <ReCAPTCHA
+              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+              onChange={setCaptcha}
+            />
+
+            <Button disabled={loading || disabled} type="submit">
               {loading && (
                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
               )}

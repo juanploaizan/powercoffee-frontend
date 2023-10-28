@@ -17,6 +17,18 @@ export type Pagination = {
   last: boolean;
 };
 
+export type Product = {
+  id: string;
+  name: string;
+  description: string;
+  purchasePrice: number;
+  salePrice: number;
+  stock: number;
+  imageUrl: string;
+  categoryId: string;
+  coffeeShopId: string;
+};
+
 export type User = {
   id: number;
   username: string;
@@ -44,4 +56,9 @@ export type Category = {
   name: string;
   coffeeShopId: string;
   createdAt: string;
+};
+
+export type ComboBoxOption = {
+  value: string;
+  label: string;
 };
