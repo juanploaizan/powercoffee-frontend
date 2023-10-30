@@ -37,7 +37,10 @@ export default async function ResetPasswordPage({
           <p className="text-gray-500 mb-4">
             The link you provided has been used, is invalid, or has expired.
           </p>
-          <Link href="/" className={buttonVariants({ variant: "outline" })}>
+          <Link
+            href="/api/auth/signin"
+            className={buttonVariants({ variant: "outline" })}
+          >
             Go to the main page <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
         </div>

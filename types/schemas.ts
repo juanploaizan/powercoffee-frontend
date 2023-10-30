@@ -51,6 +51,21 @@ export type Customer = {
   coffeeShopId: string;
 };
 
+export type Employee = {
+  id: string;
+  dni: string;
+  email: string;
+  phoneNumber: string;
+  firstName: string;
+  lastName: string;
+  birthdate: string;
+  gender: string;
+  salary: number;
+  address: string;
+  hireDate: string;
+  coffeeShopId: string;
+};
+
 export type Category = {
   id: string;
   name: string;

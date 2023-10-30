@@ -1,6 +1,6 @@
 "use client";
 
-import { Customer } from "@/types/schemas";
+import { Employee } from "@/types/schemas";
 import { ColumnDef } from "@tanstack/react-table";
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
 
@@ -30,7 +30,7 @@ import { DataTableColumnHeader } from "@/components/ui/column-header";
  * will be formatted, sorted and filtered.
  */
 
-export const columns: ColumnDef<Customer>[] = [
+export const columns: ColumnDef<Employee>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -104,7 +104,7 @@ export const columns: ColumnDef<Customer>[] = [
     enableSorting: false,
     enableHiding: false,
     cell: ({ row }) => {
-      const customer = row.original;
+      const employee = row.original;
       const [open, setOpen] = useState(false);
       const [loading, setLoading] = useState(false);
       const router = useRouter();
@@ -113,12 +113,12 @@ export const columns: ColumnDef<Customer>[] = [
         try {
           setLoading(true);
           await axios.delete(
-            `/api/coffee-shops/${customer.coffeeShopId}/customers/${customer.id}`
+            `/api/coffee-shops/${employee.coffeeShopId}/employees/${employee.id}`
           );
-          toast.success("Customer deleted.");
+          toast.success("Employee deleted.");
           router.refresh();
         } catch (error) {
-          toast.error("An error occurred while deleting customer.");
+          toast.error("An error occurred while deleting employee.");
         } finally {
           setOpen(false);
           setLoading(false);
@@ -143,7 +143,7 @@ export const columns: ColumnDef<Customer>[] = [
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <Link href={`/${customer.coffeeShopId}/customers/${customer.id}`}>
+              <Link href={`/${employee.coffeeShopId}/employees/${employee.id}`}>
                 <DropdownMenuItem>
                   <Edit className="mr-2 h-4 w-4" />
                   Edit
