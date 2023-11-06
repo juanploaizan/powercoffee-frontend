@@ -6,14 +6,13 @@ import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
-import { CheckIcon, Trash } from "lucide-react";
+import { Trash } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -22,21 +21,6 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/heading";
 import { AlertModal } from "@/components/modals/alert-modal";
-import { genders } from "@/lib/combo-boxes";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
-import { CaretSortIcon } from "@radix-ui/react-icons";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
 import ImageUpload from "@/components/ui/image-upload";
 import { Category, ComboBoxOption } from "@/types/schemas";
 import {
@@ -108,7 +92,6 @@ export const ProductsForm: React.FC<ProductsFormProps> = ({ initialData }) => {
         toast.error("An error ocurred while fetching the categories.");
       }
     };
-
     fetchCategories();
   }, []);
 

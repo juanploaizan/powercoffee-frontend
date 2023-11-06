@@ -92,3 +92,22 @@ export const avatars = [
     label: "Avatar 5",
   },
 ] as const;
+
+export const orderStatus = [
+  {
+    label: "Pending",
+    value: "PENDING",
+  },
+  {
+    label: "In progress",
+    value: "IN_PROGRESS",
+  },
+  {
+    label: "Delivered",
+    value: "DELIVERED",
+  },
+  {
+    label: "Cancelled",
+    value: "CANCELLED",
+  },
+] as const;

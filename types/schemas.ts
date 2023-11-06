@@ -66,6 +66,34 @@ export type Employee = {
   coffeeShopId: string;
 };
 
+export type Supplier = {
+  id: string;
+  nit: string;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  address: string;
+  coffeeShopId: string;
+};
+
+export type Order = {
+  id: string;
+  date: string;
+  total: number;
+  orderStatus: string;
+  customer: Customer;
+  employee: Employee;
+  coffeeShopId: string;
+  orderDetails: OrderDetail[];
+};
+
+export type OrderDetail = {
+  product: Product;
+  quantity: number;
+  productPrice: number;
+  subtotal: number;
+};
+
 export type Category = {
   id: string;
   name: string;
