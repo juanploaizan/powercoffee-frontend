@@ -7,15 +7,8 @@ export async function PUT(
   { params }: { params: { coffeeShopId: string; customerId: string } }
 ) {
   try {
-    const user = await useSession();
-
-    if (!user) {
-      return new NextResponse("Unauthorized", { status: 401 });
-    }
-
     const body = await req.json();
 
-    console.log("params", params);
     const res = await api.put(
       `/api/coffee-shops/${params.coffeeShopId}/customers/${params.customerId}`,
       body
