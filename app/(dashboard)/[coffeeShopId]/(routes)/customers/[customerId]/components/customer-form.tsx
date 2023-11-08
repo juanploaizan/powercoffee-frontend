@@ -38,12 +38,28 @@ import {
 } from "@/components/ui/command";
 
 const formSchema = z.object({
-  dni: z.string().min(1, "DNI is required"),
-  email: z.string().email("Invalid email").min(1, "Email is required"),
-  phoneNumber: z.string().min(1, "Phone number is required"),
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  birthDate: z.string().min(1, "Birth date is required"),
+  dni: z
+    .string()
+    .min(1, "DNI is required")
+    .max(10, "DNI must be at most 10 digits"),
+  email: z
+    .string()
+    .email("Invalid email")
+    .min(1, "Email is required")
+    .max(50, "Email must be at most 50 characters"),
+  phoneNumber: z
+    .string()
+    .length(10, "Phone number must be 10 digits")
+    .regex(/^[3][0-9]*$/, "Phone number must start with 3"),
+  firstName: z
+    .string()
+    .min(2, "First name most be at least 2 characters")
+    .max(30, "First name must be at most 30 characters"),
+  lastName: z
+    .string()
+    .min(2, "Last name most be at least 2 characters")
+    .max(30, "Last name must be at most 30 characters"),
+  birthDate: z.string().length(10, "Birth date is required"),
   gender: z.string({
     required_error: "Please select a gender.",
   }),

@@ -75,7 +75,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
         <p className="text-base font-semibold leading-none">
           Total:{" "}
           <span className="font-normal">
-            {new Intl.NumberFormat("en-IN", {
+            {new Intl.NumberFormat("en-US", {
               style: "currency",
               currency: "COP",
               minimumFractionDigits: 2,

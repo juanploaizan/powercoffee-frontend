@@ -145,7 +145,7 @@ export default function OrdersClientPage({ orders }: OrderPageProps) {
                     <p>
                       <span className="font-bold leading-none">Total:</span>{" "}
                       <span>
-                        {new Intl.NumberFormat("en-IN", {
+                        {new Intl.NumberFormat("en-US", {
                           style: "currency",
                           currency: "COP",
                           minimumFractionDigits: 2,

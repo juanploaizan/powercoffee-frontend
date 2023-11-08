@@ -21,10 +21,12 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/heading";
 import { AlertModal } from "@/components/modals/alert-modal";
-import api from "@/lib/axios-interceptor";
 
 const formSchema = z.object({
-  name: z.string().min(1, "Name is required"),
+  name: z
+    .string()
+    .min(3, "Name must be at least 3 characters")
+    .max(60, "Name must be at most 60 characters"),
 });
 
 type FormValues = z.infer<typeof formSchema>;

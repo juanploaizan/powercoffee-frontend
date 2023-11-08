@@ -56,7 +56,7 @@ export function ProductDetail({
       <CardFooter className="flex items-center justify-end">
         <p className="text-sm">
           Total:{" "}
-          {new Intl.NumberFormat("en-IN", {
+          {new Intl.NumberFormat("en-US", {
             style: "currency",
             currency: "COP",
             minimumFractionDigits: 2,

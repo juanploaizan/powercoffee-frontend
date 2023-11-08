@@ -140,6 +140,8 @@ export const OrderModal: React.FC<OrderModalProps> = ({
       (orderDetail: any) => orderDetail.productId === productId
     );
 
+    console.log("El producto", product, "está presente?", isPresent);
+
     if (isPresent) {
       const newOrderDetails = orderDetails.map((orderDetail: any) => {
         if (orderDetail.productId === productId) {
@@ -151,7 +153,8 @@ export const OrderModal: React.FC<OrderModalProps> = ({
         return orderDetail;
       });
       setOrderDetails(newOrderDetails);
-      form.setValue("orderDetails", orderDetails);
+      form.setValue("orderDetails", newOrderDetails);
+      console.log;
     } else {
       const newOrderDetails = [
         ...orderDetails,
@@ -171,6 +174,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({
     let isPresent: boolean = orderDetails.some(
       (orderDetail: any) => orderDetail.productId === productId
     );
+    console.log("El producto", product, "está presente?", isPresent);
 
     if (isPresent) {
       const newOrderDetails = orderDetails.map((orderDetail: any) => {
@@ -435,7 +439,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({
               <CardFooter className="justify-between">
                 <div className="text-sm font-medium">Total</div>
                 <div className="text-sm font-medium">
-                  {new Intl.NumberFormat("en-IN", {
+                  {new Intl.NumberFormat("en-US", {
                     style: "currency",
                     currency: "COP",
                     minimumFractionDigits: 2,

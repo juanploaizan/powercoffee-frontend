@@ -32,8 +32,8 @@ const formSchema = z.object({
   email: z
     .string()
     .email("Please enter a valid email address")
-    .max(50, "Please enter a valid email address")
-    .min(5, "Please enter a valid email address"),
+    .max(50, "Email must be at most 50 characters")
+    .min(6, "Email must be at least 6 characters"),
 });
 
 export default function ForgotPasswordForm() {

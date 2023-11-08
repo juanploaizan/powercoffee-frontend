@@ -38,18 +38,40 @@ import {
 } from "@/components/ui/command";
 
 const formSchema = z.object({
-  dni: z.string().min(1, "DNI is required"),
-  email: z.string().email("Invalid email").min(1, "Email is required"),
-  phoneNumber: z.string().min(1, "Phone number is required"),
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  birthdate: z.string().min(1, "Birth date is required"),
+  dni: z
+    .string()
+    .min(6, "DNI must be at least 6 characters")
+    .max(10, "DNI must be at most 10 characters"),
+  email: z
+    .string()
+    .email("Invalid email")
+    .min(5, "Email must be at least 5 characters")
+    .max(50, "Email must be at most 50 characters"),
+  phoneNumber: z
+    .string()
+    .length(10, "Phone number must be 10 digits")
+    .regex(/^[3][0-9]*$/, "Phone number must start with 3"),
+  firstName: z
+    .string()
+    .min(2, "First name most be at least 2 characters")
+    .max(30, "First name must be at most 30 characters"),
+  lastName: z
+    .string()
+    .min(2, "Last name most be at least 2 characters")
+    .max(30, "Last name must be at most 30 characters"),
+  birthdate: z.string().length(10, "Birth date is required"),
   gender: z.string({
     required_error: "Please select a gender.",
   }),
-  salary: z.number().min(1, "Salary is required"),
-  address: z.string().min(1, "Address is required"),
-  hireDate: z.string().min(1, "Hire date is required"),
+  salary: z
+    .string()
+    .min(1, "Salary is required")
+    .regex(/^\d+(?:\.\d{0,2})?$/, "Salary must be a number"),
+  address: z
+    .string()
+    .min(2, "Address must be at least 2 characters")
+    .max(70, "Address must be at most 70 characters"),
+  hireDate: z.string().length(10, "Hire date is required"),
 });
 
 type FormValues = z.infer<typeof formSchema>;

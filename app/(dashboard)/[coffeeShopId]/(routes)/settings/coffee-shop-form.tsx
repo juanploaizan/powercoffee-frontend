@@ -35,8 +35,14 @@ import {
 import { cities } from "@/lib/combo-boxes";
 
 const formSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  address: z.string().min(1, "Address is required"),
+  name: z
+    .string()
+    .min(3, "Name must be at least 3 characters")
+    .max(60, "Name must be at most 60 characters"),
+  address: z
+    .string()
+    .min(3, "Address must be at least 3 characters")
+    .max(200, "Address must be at most 200 characters"),
   city: z.string({
     required_error: "Please select a city.",
   }),

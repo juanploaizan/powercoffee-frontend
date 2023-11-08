@@ -20,8 +20,6 @@ import { signIn } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { badgeVariants } from "@/components/ui/badge";
-import { Label } from "@/components/ui/label";
 
 interface UserLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 

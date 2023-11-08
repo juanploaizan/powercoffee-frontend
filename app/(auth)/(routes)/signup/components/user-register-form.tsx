@@ -26,18 +26,38 @@ const formSchema = z
   .object({
     username: z
       .string()
-      .min(1)
-      .max(20)
+      .min(3, "Username must be at least 3 characters")
+      .max(20, "Username must be at most 20 characters")
       .regex(
         /^[a-zA-Z][a-zA-Z0-9_-]*$/,
         "Username can only contain letters, numbers, underscores and dashes."
       ),
-    email: z.string().email().min(1).max(50),
-    phoneNumber: z.string().length(10),
-    firstName: z.string().min(2).max(30),
-    lastName: z.string().min(2).max(30),
-    password: z.string().min(8).max(25),
-    confirmPassword: z.string().min(8).max(25),
+    email: z
+      .string()
+      .email("Invalid email format")
+      .min(5, "Email must be at least 5 characters")
+      .max(50, "Email must be at most 50 characters"),
+    phoneNumber: z
+      .string()
+      .length(10, "Phone number must be 10 digits")
+      .regex(/^[3][0-9]*$/, "Phone number must start with 3"),
+    firstName: z
+      .string()
+      .min(2, "First name must be at least 2 characters")
+      .max(30, "First name must be at most 30 characters"),
+    lastName: z
+      .string()
+      .min(2, "Last name must be at least 2 characters")
+      .max(30, "Last name must be at most 30 characters"),
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .max(25, "Password must be at most 25 characters")
+      .regex(
+        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).+$/,
+        "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character."
+      ),
+    confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
@@ -66,10 +86,14 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       setIsLoading(true);
-      const res = await axios.post("http://localhost:8080/api/users/signup", {
-        ...values,
-        role: ["ADMIN"],
-      });
+
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/users/signup`,
+        {
+          ...values,
+          role: ["ADMIN"],
+        }
+      );
       if (res.status === 200) {
         setIsRedirecting(true);
         toast.success("User registered successfully!");

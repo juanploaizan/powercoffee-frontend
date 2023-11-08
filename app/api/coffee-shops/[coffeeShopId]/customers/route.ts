@@ -28,12 +28,6 @@ export async function POST(
   { params }: { params: { coffeeShopId: string } }
 ) {
   try {
-    const user = await useSession();
-
-    if (!user) {
-      return new NextResponse("Unauthorized", { status: 401 });
-    }
-
     const body = await req.json();
 
     const res = await api.post(

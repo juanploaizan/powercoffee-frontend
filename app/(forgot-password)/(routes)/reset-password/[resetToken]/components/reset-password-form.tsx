@@ -32,8 +32,15 @@ interface ResetPasswordFormProps {
 
 const formSchema = z
   .object({
-    newPassword: z.string().min(8, "Please enter a valid password"),
-    newPasswordConfirmation: z.string().min(8, "Please enter a valid password"),
+    newPassword: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .max(25, "Password must be at most 25 characters")
+      .regex(
+        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).+$/,
+        "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character."
+      ),
+    newPasswordConfirmation: z.string(),
   })
   .refine((data) => data.newPassword === data.newPasswordConfirmation, {
     message: "Passwords don't match",

@@ -32,12 +32,27 @@ import {
 } from "@/components/ui/select";
 
 const formSchema = z.object({
-  name: z.string().min(1, "Name is required."),
-  description: z.string().min(1, "Description is required."),
-  imageUrl: z.string().min(1, "Image URL is required."),
-  purchasePrice: z.string().min(1, "Purchase price is required."),
-  salePrice: z.string().min(1, "Sale price is required."),
-  stock: z.string().min(1, "Stock is required."),
+  name: z
+    .string()
+    .min(3, "Name must be at least 3 characters")
+    .max(50, "Name must be at most 50 characters"),
+  description: z
+    .string()
+    .min(3, "Description must be at least 3 characters")
+    .max(255, "Description must be at most 255 characters"),
+  imageUrl: z.string().min(3, "Image is required"),
+  purchasePrice: z
+    .string()
+    .min(1, "Purchase price is required")
+    .regex(/^\d+(?:\.\d{0,2})?$/, "Purchase price must be a number"),
+  salePrice: z
+    .string()
+    .min(1, "Sale price is required.")
+    .regex(/^\d+(?:\.\d{0,2})?$/, "Sale price must be a number"),
+  stock: z
+    .string()
+    .min(1, "Stock is required.")
+    .regex(/^\d+$/, "Sale price must be a integer number"),
   categoryId: z.string({
     required_error: "Please select a category.",
   }),
@@ -265,7 +280,6 @@ export const ProductsForm: React.FC<ProductsFormProps> = ({ initialData }) => {
                   <FormLabel>Stock</FormLabel>
                   <FormControl>
                     <Input
-                      type="number"
                       disabled={loading}
                       placeholder="Enter the product's stock"
                       {...field}

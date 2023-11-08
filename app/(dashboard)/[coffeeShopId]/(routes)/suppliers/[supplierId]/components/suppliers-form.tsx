@@ -31,7 +31,7 @@ const formSchema = z.object({
   email: z
     .string()
     .email("Invalid email")
-    .min(1, "Email is required")
+    .min(5, "Email must be at least 5 characters")
     .max(50, "Email must be 50 characters"),
   phoneNumber: z
     .string()
