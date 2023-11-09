@@ -7,19 +7,7 @@ import Link from "next/link";
 import { Plus } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { buttonVariants } from "@/components/ui/button";
-
-export const getSuppliers = async (
-  coffeeShopId: string,
-  pageNumber: string,
-  pageSize: string
-): Promise<PaginationResponse<Supplier>> => {
-  const response: PaginationResponse<Supplier> = await api
-    .get(
-      `/api/coffee-shops/${coffeeShopId}/suppliers?pageNumber=${pageNumber}&pageSize=${pageSize}`
-    )
-    .then((res) => res.data);
-  return response;
-};
+import { getSuppliers } from "@/actions/get-pagination-data/get-suppliers";
 
 const SuppliersPage = async ({
   params,

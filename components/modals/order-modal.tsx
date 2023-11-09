@@ -407,14 +407,10 @@ export const OrderModal: React.FC<OrderModalProps> = ({
               </CardHeader>
               <CardContent>
                 <div className="flex flex-col space-y-4">
-                  <div className="flex justify-between">
-                    <div className="text-sm font-medium">Product</div>
-                    <div className="text-sm font-medium">Quantity x Price</div>
-                  </div>
                   {orderDetails.map((orderDetail: any) => {
                     const product = products.find(
                       (product: Product) => product.id === orderDetail.productId
-                    );
+                    ) as Product | undefined;
                     return (
                       <div
                         key={orderDetail.productId}
@@ -425,11 +421,12 @@ export const OrderModal: React.FC<OrderModalProps> = ({
                         </div>
                         <div className="text-sm font-medium">
                           {orderDetail.quantity} x{" "}
-                          {new Intl.NumberFormat("en-IN", {
-                            style: "currency",
-                            currency: "COP",
-                            minimumFractionDigits: 2,
-                          }).format(product?.salePrice)}
+                          {product &&
+                            new Intl.NumberFormat("en-IN", {
+                              style: "currency",
+                              currency: "COP",
+                              minimumFractionDigits: 2,
+                            }).format(product.salePrice)}
                         </div>
                       </div>
                     );
@@ -448,9 +445,11 @@ export const OrderModal: React.FC<OrderModalProps> = ({
                       const product = products.find(
                         (product: Product) =>
                           product.id === orderDetail.productId
-                      );
+                      ) as Product | undefined;
                       return (
-                        acc + orderDetail.quantity * product?.salePrice || 0
+                        acc +
+                        ((product?.salePrice as number) || 0) *
+                          orderDetail.quantity
                       );
                     }, 0)
                   )}

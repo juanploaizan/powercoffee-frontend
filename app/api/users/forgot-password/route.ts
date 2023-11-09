@@ -6,7 +6,8 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const res = await axios.post(`${API_URL}/api/users/forgot-password`, body);
-    return NextResponse.json(res.data);
+    const { data } = res;
+    return NextResponse.json(data);
   } catch (error: any) {
     //console.log("[COFFEE-SHOPS_POST] ", error);
     return new NextResponse(JSON.stringify(error.response.data), {

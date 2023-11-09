@@ -1,5 +1,4 @@
-import api from "@/lib/axios-interceptor";
-import { Product, Pagination, PaginationResponse } from "@/types/schemas";
+import { Pagination } from "@/types/schemas";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
 import { Heading } from "@/components/ui/heading";
@@ -7,19 +6,7 @@ import Link from "next/link";
 import { Plus } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { buttonVariants } from "@/components/ui/button";
-
-export const getProducts = async (
-  coffeeShopId: string,
-  pageNumber: string,
-  pageSize: string
-): Promise<PaginationResponse<Product>> => {
-  const response: PaginationResponse<Product> = await api
-    .get(
-      `/api/coffee-shops/${coffeeShopId}/products?pageNumber=${pageNumber}&pageSize=${pageSize}`
-    )
-    .then((res) => res.data);
-  return response;
-};
+import { getProducts } from "@/actions/get-pagination-data/get-products";
 
 const ProductsPage = async ({
   params,

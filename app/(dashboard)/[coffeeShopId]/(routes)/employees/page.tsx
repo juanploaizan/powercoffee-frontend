@@ -1,5 +1,4 @@
-import api from "@/lib/axios-interceptor";
-import { Employee, Pagination, PaginationResponse } from "@/types/schemas";
+import { Pagination } from "@/types/schemas";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
 import { Heading } from "@/components/ui/heading";
@@ -7,19 +6,7 @@ import Link from "next/link";
 import { Plus } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { buttonVariants } from "@/components/ui/button";
-
-export const getEmployees = async (
-  coffeeShopId: string,
-  pageNumber: string,
-  pageSize: string
-): Promise<PaginationResponse<Employee>> => {
-  const response: PaginationResponse<Employee> = await api
-    .get(
-      `/api/coffee-shops/${coffeeShopId}/employees?pageNumber=${pageNumber}&pageSize=${pageSize}`
-    )
-    .then((res) => res.data);
-  return response;
-};
+import { getEmployees } from "@/actions/get-pagination-data/get-employees";
 
 const EmployeesPage = async ({
   params,
