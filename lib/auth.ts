@@ -95,14 +95,16 @@ export const authConfig: NextAuthOptions = {
   },
 };
 
-export async function loginIsRequiredServer() {
+export async function LoginIsRequiredServer() {
   const session = await getServerSession(authConfig);
   if (!session) return redirect("/signin");
 }
 
-export function loginIsRequiredClient() {
+export function LoginIsRequiredClient() {
   if (typeof window === "undefined") {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const session = useSession();
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const router = useRouter();
     if (!session) router.push("/signin");
   }

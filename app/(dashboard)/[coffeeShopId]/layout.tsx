@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import Navbar from "@/components/navbar";
 import api from "@/lib/axios-interceptor";
-import { loginIsRequiredServer } from "@/lib/auth";
+import { LoginIsRequiredServer } from "@/lib/auth";
 
 export default async function DashboardLayout({
   children,
@@ -10,7 +10,7 @@ export default async function DashboardLayout({
   children: React.ReactNode;
   params: { coffeeShopId: string };
 }) {
-  await loginIsRequiredServer();
+  await LoginIsRequiredServer();
 
   try {
     await api.get(`/api/coffee-shops/${params.coffeeShopId}`);
