@@ -5,7 +5,6 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { cn } from "@/lib/utils";
-import { Icons } from "@/components/Icons";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -20,6 +19,8 @@ import { signIn } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Icons } from "@/components/icons";
+import { GoogleSignInButton } from "@/components/auth-buttons";
 
 interface UserLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -41,24 +42,19 @@ export function UserLoginForm({ className, ...props }: UserLoginFormProps) {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      setIsLoading(true);
-      const result = await signIn("credentials", {
-        redirect: false,
-        username: values.username,
-        password: values.password,
-        callbackUrl: "/",
-      });
+    setIsLoading(true);
+    const signInResponse = await signIn("credentials", {
+      redirect: false,
+      email: values.username,
+      password: values.password,
+    });
 
-      if (result?.ok) {
-        router.push("/");
-      } else {
-        toast.error("Invalid credentials.");
-      }
-    } catch (error: any) {
-      toast.error(error);
-    } finally {
+    if (signInResponse && !signInResponse.error) {
+      router.push("/");
+    } else {
+      console.log("Error:", signInResponse);
       setIsLoading(false);
+      toast.error("Your email or password is wrong! Please try again");
     }
   }
 
@@ -124,19 +120,10 @@ export function UserLoginForm({ className, ...props }: UserLoginFormProps) {
           <span className="w-full border-t" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
-            Or continue with
-          </span>
+          <span className="bg-background px-2 text-muted-foreground">Or</span>
         </div>
       </div>
-      <Button variant="outline" type="button" disabled={isLoading}>
-        {isLoading ? (
-          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <Icons.google className="mr-2 h-4 w-4" />
-        )}{" "}
-        Google
-      </Button>
+      <GoogleSignInButton />
     </div>
   );
 }

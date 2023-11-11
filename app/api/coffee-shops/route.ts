@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
-import { useSession } from "@/lib/user-session";
 import api from "@/lib/axios-interceptor";
+import { getServerSession } from "next-auth";
+import { authConfig } from "@/lib/auth";
 
 export async function POST(req: Request) {
   try {
-    const user = await useSession();
+    const session = await getServerSession(authConfig);
+    const user = session?.user;
     if (!user) {
       return new NextResponse("Unauthorized", { status: 401 });
     }

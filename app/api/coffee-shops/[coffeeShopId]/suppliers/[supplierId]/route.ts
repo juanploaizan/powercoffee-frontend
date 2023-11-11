@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { useSession } from "@/lib/user-session";
 import api from "@/lib/axios-interceptor";
 
 export async function PUT(
@@ -7,15 +6,7 @@ export async function PUT(
   { params }: { params: { coffeeShopId: string; supplierId: string } }
 ) {
   try {
-    const user = await useSession();
-
-    if (!user) {
-      return new NextResponse("Unauthorized", { status: 401 });
-    }
-
     const body = await req.json();
-
-    console.log("params", params);
     const res = await api.put(
       `/api/coffee-shops/${params.coffeeShopId}/suppliers/${params.supplierId}`,
       body
@@ -33,12 +24,6 @@ export async function DELETE(
   { params }: { params: { coffeeShopId: string; supplierId: string } }
 ) {
   try {
-    const user = await useSession();
-
-    if (!user) {
-      return new NextResponse("Unauthorized", { status: 401 });
-    }
-
     const res = await api.delete(
       `/api/coffee-shops/${params.coffeeShopId}/suppliers/${params.supplierId}`
     );

@@ -1,12 +1,14 @@
 import axios from "axios";
-import { useSession } from "@/lib/user-session";
+import { getServerSession } from "next-auth";
+import { authConfig } from "./auth";
 
 const api = axios.create({
   baseURL: process.env.BACKEND_URL,
 });
 
 api.interceptors.request.use(async (config) => {
-  const user = await useSession();
+  const session = await getServerSession(authConfig);
+  const user = session?.user;
   if (user) {
     config.headers.Authorization = `Bearer ${user.accessToken}`;
   }

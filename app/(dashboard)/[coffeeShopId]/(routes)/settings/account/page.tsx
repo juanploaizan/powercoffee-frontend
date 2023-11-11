@@ -1,11 +1,13 @@
 import { Separator } from "@/components/ui/separator";
 import api from "@/lib/axios-interceptor";
-import { useSession } from "@/lib/user-session";
 import { redirect } from "next/navigation";
 import { AccountSettingsForm } from "./account-form";
+import { getServerSession } from "next-auth";
+import { authConfig } from "@/lib/auth";
 
 export default async function AccountSettingsPage() {
-  const user = await useSession();
+  const session = await getServerSession(authConfig);
+  const user = session?.user;
 
   if (!user) {
     redirect("/");
@@ -13,6 +15,7 @@ export default async function AccountSettingsPage() {
 
   const res = await api.get(`/api/users/${user.id}`);
   const userInfo = res.data;
+  userInfo.phoneNumber = userInfo.phoneNumber || undefined;
 
   return (
     <div className="space-y-6">

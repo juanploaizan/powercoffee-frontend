@@ -21,7 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { Icons } from "@/components/Icons";
+import { Icons } from "@/components/icons";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";

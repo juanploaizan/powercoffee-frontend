@@ -13,7 +13,6 @@ import { getTotalRevenue } from "@/actions/get-total-revenue";
 import { addDays, format } from "date-fns";
 import { getSalesCount } from "@/actions/get-sales-count";
 import { getClientsCount } from "@/actions/get-clients-count";
-import { get } from "http";
 import { getProductsOverview } from "@/actions/get-products-overview";
 import { getRecentSales } from "@/actions/get-recent-sales";
 import { Overview } from "./components/overview";
