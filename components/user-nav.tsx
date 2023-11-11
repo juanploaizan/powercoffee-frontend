@@ -8,14 +8,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { authConfig } from "@/lib/auth";
 import api from "@/lib/axios-interceptor";
-import { useSession } from "@/lib/user-session";
 import { User } from "@/types/schemas";
+import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export async function UserNav() {
-  const user = await useSession();
+  const session = await getServerSession(authConfig);
+  const user = session?.user;
 
   if (!user) {
     redirect("/");

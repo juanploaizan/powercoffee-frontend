@@ -1,5 +1,7 @@
+import { authConfig } from "@/lib/auth";
 import api from "@/lib/axios-interceptor";
-import { useSession } from "@/lib/user-session";
+import { getServerSession } from "next-auth";
+
 import { redirect } from "next/navigation";
 
 export default async function SetupPage({
@@ -7,7 +9,8 @@ export default async function SetupPage({
 }: {
   children: React.ReactNode;
 }) {
-  const user = await useSession();
+  const session = await getServerSession(authConfig);
+  const user = session?.user;
 
   if (!user) {
     redirect("api/auth/signin");

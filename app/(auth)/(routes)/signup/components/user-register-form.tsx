@@ -5,7 +5,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { cn } from "@/lib/utils";
-import { Icons } from "@/components/Icons";
+import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/form";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { GoogleSignInButton } from "@/components/auth-buttons";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -29,8 +30,8 @@ const formSchema = z
       .min(3, "Username must be at least 3 characters")
       .max(20, "Username must be at most 20 characters")
       .regex(
-        /^[a-zA-Z][a-zA-Z0-9_-]*$/,
-        "Username can only contain letters, numbers, underscores and dashes."
+        /^[a-zA-Z0-9]+(?:[-_.][a-zA-Z0-9]+)*$/,
+        "Username must contain only letters, numbers, hyphens, underscores, and periods."
       ),
     email: z
       .string()
@@ -273,23 +274,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           <span className="w-full border-t" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
-            Or continue with
-          </span>
+          <span className="bg-background px-2 text-muted-foreground">Or</span>
         </div>
       </div>
-      <Button
-        variant="outline"
-        type="button"
-        disabled={isLoading || isRedirecting}
-      >
-        {isLoading || isRedirecting ? (
-          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <Icons.google className="mr-2 h-4 w-4" />
-        )}{" "}
-        Google
-      </Button>
+      <GoogleSignInButton />
     </div>
   );
 }

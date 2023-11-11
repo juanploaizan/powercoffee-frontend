@@ -1,5 +1,7 @@
+import { authConfig } from "@/lib/auth";
 import api from "@/lib/axios-interceptor";
-import { useSession } from "@/lib/user-session";
+import { getServerSession } from "next-auth";
+
 import { NextResponse } from "next/server";
 
 export async function PUT(
@@ -7,7 +9,9 @@ export async function PUT(
   { params }: { params: { coffeeShopId: string } }
 ) {
   try {
-    const user = await useSession();
+    const session = await getServerSession(authConfig);
+    const user = session?.user;
+
     if (!user) {
       return NextResponse.redirect("api/auth/signin");
     }
@@ -37,12 +41,6 @@ export async function DELETE(
   { params }: { params: { coffeeShopId: string } }
 ) {
   try {
-    const user = await useSession();
-    if (!user) {
-      return NextResponse.redirect("api/auth/signin");
-    }
-
-    console.log("params: ", params);
     if (!params.coffeeShopId) {
       return new NextResponse("Missing coffeeShopId", { status: 400 });
     }

@@ -38,11 +38,11 @@ import {
 const formSchema = z.object({
   username: z
     .string()
-    .min(5, "Username must be at least 5 characters.")
+    .min(3, "Username must be at least 3 characters.")
     .max(20, "Username must be less than 20 characters.")
     .regex(
-      /^[a-zA-Z][a-zA-Z0-9_-]*$/,
-      "Username can only contain letters, numbers, underscores and dashes."
+      /^[a-zA-Z0-9]+(?:[-_.][a-zA-Z0-9]+)*$/,
+      "Username must contain only letters, numbers, hyphens, underscores, and periods."
     ),
   email: z
     .string()
@@ -55,7 +55,8 @@ const formSchema = z.object({
     .regex(
       /^[3][0-9]*$/,
       "Phone number must start with 3 and contain only digits."
-    ),
+    )
+    .optional(),
   firstName: z
     .string()
     .min(1, "First name is required")

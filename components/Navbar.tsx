@@ -3,15 +3,17 @@ import StoreSwitcher from "@/components/store-switcher";
 import { UserNav } from "@/components/user-nav";
 import { ThemeToggle } from "@/components/theme-toggle";
 import Link from "next/link";
-import { useSession } from "@/lib/user-session";
 import api from "@/lib/axios-interceptor";
 import { MainNav } from "@/components/main-nav";
+import { getServerSession } from "next-auth";
+import { authConfig } from "@/lib/auth";
 
 const Navbar = async () => {
-  const user = await useSession();
+  const session = await getServerSession(authConfig);
+  const user = session?.user;
 
   if (!user) {
-    redirect("api/auth/signin");
+    redirect("/signin");
   }
 
   const getAdminStores = async () => {
