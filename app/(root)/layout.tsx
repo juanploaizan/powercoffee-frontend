@@ -24,8 +24,9 @@ export default async function SetupPage({
 
   const res = await api.get(`/api/coffee-shops/admin/${user.id}`); // Get the first coffee shop of the user
 
-  if (res.data.id) {
-    redirect(`/${res.data.id}`); // Redirect to the coffee shop page
+  const coffeeShop = res.data;
+  if (coffeeShop.id) {
+    redirect(`/${coffeeShop.id}`); // Redirect to the coffee shop page
   }
 
   return <>{children}</>;

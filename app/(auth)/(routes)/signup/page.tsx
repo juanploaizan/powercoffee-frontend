@@ -3,6 +3,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { UserAuthForm } from "@/app/(auth)/(routes)/signup/components/user-register-form";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export const metadata: Metadata = {
   title: "Powercoffee - Register",
@@ -15,7 +16,7 @@ export default function RegisterPage() {
       <div className="md:hidden">
         <h1>Responsive is not support.</h1>
       </div>
-      <div className="container relative hidden h-[800px] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+      <div className="container relative hidden max-h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <Link
           href="/signin"
           className={cn(
@@ -60,10 +61,14 @@ export default function RegisterPage() {
                 Create an account
               </h1>
               <p className="text-sm text-muted-foreground">
-                Enter your email below to create your account
+                Enter your info below to create your account
               </p>
             </div>
-            <UserAuthForm />
+            <ScrollArea className="h-[450px] w-[350px] p-4 mb-4">
+              <div className="p-2">
+                <UserAuthForm />
+              </div>
+            </ScrollArea>
             <p className="px-8 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our{" "}
               <Link

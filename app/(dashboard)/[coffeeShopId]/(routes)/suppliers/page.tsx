@@ -1,5 +1,4 @@
-import api from "@/lib/axios-interceptor";
-import { Supplier, Pagination, PaginationResponse } from "@/types/schemas";
+import { Pagination } from "@/types/schemas";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
 import { Heading } from "@/components/ui/heading";
@@ -8,6 +7,8 @@ import { Plus } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { buttonVariants } from "@/components/ui/button";
 import { getSuppliers } from "@/actions/get-pagination-data/get-suppliers";
+import { getSuggestedSuppliers } from "@/actions/get-pagination-data/get-suggested-providers";
+import { SuggestedSuppliersTable } from "./suggested-table";
 
 const SuppliersPage = async ({
   params,
@@ -33,6 +34,10 @@ const SuppliersPage = async ({
   };
   const suppliers = data;
 
+  const suggestedSuppliers = (await getSuggestedSuppliers(
+    params.coffeeShopId
+  )) as any[];
+
   return (
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8 pt-6">
@@ -55,6 +60,9 @@ const SuppliersPage = async ({
             data={suppliers}
             pagination={pagination}
           />
+          <div className="mt-4">
+            <SuggestedSuppliersTable suggestedSuppliers={suggestedSuppliers} />
+          </div>
         </div>
       </div>
     </div>

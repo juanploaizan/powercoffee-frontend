@@ -9,12 +9,9 @@ export default async function AuthLayout({
 }) {
   const session = await getServerSession(authConfig);
   const user = session?.user;
-  console.log("user in auth layout", user);
-
   if (user) {
     redirect("/");
   }
-
   return (
     <div className="flex items-center justify-center w-full min-h-screen">
       {children}

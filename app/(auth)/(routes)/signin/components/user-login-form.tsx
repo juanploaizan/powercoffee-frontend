@@ -25,7 +25,11 @@ import { GoogleSignInButton } from "@/components/auth-buttons";
 interface UserLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const formSchema = z.object({
-  username: z.string().min(1).max(30),
+  username: z
+    .string()
+    .email("Invalid email format")
+    .min(5, "Email must be at least 5 characters")
+    .max(50, "Email must be at most 50 characters"),
   password: z.string().min(8).max(30),
 });
 

@@ -24,13 +24,14 @@ export const authConfig: NextAuthOptions = {
           return null;
 
         // Get user from database by email and password
-        const user = {
-          id: 1,
-          username: "juanploaizan",
-          email: "jloaizanieto@gmail.com",
-          accessToken:
-            "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqbG9haXphbmlldG9AZ21haWwuY29tIiwiaWQiOjEsInVzZXJuYW1lIjoianVhbnBsb2FpemFuIiwiaWF0IjoxNjk5NjY2MjkxLCJleHAiOjE2OTk3NTI2OTF9.4riVgILAGLCHnCq0wS-K7FBWsuCayn7Z3inXQka27Vg",
-        };
+        const url = (process.env.BACKEND_URL as string) + "/api/users/signin";
+        const response = await axios.post(url, {
+          username: credentials.email,
+          password: credentials.password,
+        });
+
+        const user = response.data;
+        console.log(user);
 
         // If user, returns the user object
         if (user) return user;
